@@ -1,12 +1,12 @@
 ---
 name: searxng-search
 description: |
-  Search the internet via a self-hosted SearXNG instance. Use when the user asks questions requiring real-time information, news, fact-checking, product lookups, weather, or any knowledge beyond training data. Supports Baidu, Bing, 360 Search, Bilibili, and other engines.
+  Search the internet via a self-hosted SearXNG instance. Use when the user asks questions requiring real-time information, news, fact-checking, product lookups, weather, or any knowledge beyond training data. Supports Baidu, Bing, 360 Search, Bilibili, and other engines. Works with both Claude Code and openClaw.
 license: MIT
-compatibility: Requires a running SearXNG instance with JSON API enabled. Agent must have either web_fetch access (domain/public IP) or exec/shell access (localhost fallback).
+compatibility: Requires a running SearXNG instance with JSON API enabled. Works with Claude Code and openClaw. Agent must have either web_fetch access (domain/public IP) or exec/shell access (localhost fallback).
 metadata:
   author: openclaw-community
-  version: "1.1.0"
+  version: "1.2.0"
   openclaw:
     always: true
     emoji: "🔍"
@@ -37,6 +37,27 @@ allowed-tools: web_fetch exec
 
 ## Setup
 
+### Claude Code
+
+Set `SEARXNG_BASE_URL` in `~/.claude/settings.json` (global) or `.claude/settings.json` (project):
+
+```json
+{
+  "env": {
+    "SEARXNG_BASE_URL": "https://searx.example.com"
+  },
+  "skills": {
+    "entries": {
+      "searxng-search": {
+        "enabled": true
+      }
+    }
+  }
+}
+```
+
+### openClaw
+
 Set `SEARXNG_BASE_URL` in `openclaw.json`:
 
 ```json5
@@ -46,8 +67,6 @@ Set `SEARXNG_BASE_URL` in `openclaw.json`:
       "searxng-search": {
         enabled: true,
         env: {
-          // Use domain/public IP for web_fetch compatibility
-          // Fallback to localhost if only exec is available
           SEARXNG_BASE_URL: "https://searx.example.com"
         }
       }
@@ -55,6 +74,8 @@ Set `SEARXNG_BASE_URL` in `openclaw.json`:
   }
 }
 ```
+
+> **Note:** For localhost/private IP deployments, both Claude Code and openClaw use `exec + curl` (Method 2) since `web_fetch` blocks private IPs. Public domains/IPs use `web_fetch`.
 
 See [references/deployment.md](references/deployment.md) for SearXNG Docker setup.
 
