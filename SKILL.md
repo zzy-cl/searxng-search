@@ -45,16 +45,11 @@ Set `SEARXNG_BASE_URL` in `~/.claude/settings.json` (global) or `.claude/setting
 {
   "env": {
     "SEARXNG_BASE_URL": "https://searx.example.com"
-  },
-  "skills": {
-    "entries": {
-      "searxng-search": {
-        "enabled": true
-      }
-    }
   }
 }
 ```
+
+> **Note:** The `skills.entries` configuration shown in older documentation is **not supported** in Claude Code's settings.json schema. Simply setting the `SEARXNG_BASE_URL` environment variable is sufficient — the skill will automatically use it.
 
 ### openClaw
 
